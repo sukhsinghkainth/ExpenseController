@@ -44,6 +44,5 @@ export const addSampleData = async (req: Request, res: Response) => {
   }
 };
 
-/// here to export 
 
 export default addSampleData
