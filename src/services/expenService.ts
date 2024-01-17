@@ -2,17 +2,18 @@
 import { Request, Response } from 'express';
 import userModel from '../model/userModel';
 import ExpenseModel from '../model/expenseModel';
+import settlementModel from '../model/settlementModel';
+
 
 
 export const addSampleData = async (req: Request, res: Response) => {
   try {
     // Create a new user
     const newUser = new userModel({
-      username: 'sukh',
+      username: 'sukhsinghkainth',
       email: 'sukh@gmail.com',
-      password: '123',
       overallBudget: 1000,
-      budgetLeft: 800,
+      amountLeft: 800,
     });
 
     
@@ -21,14 +22,24 @@ export const addSampleData = async (req: Request, res: Response) => {
 
     // Create a new expense
     const newExpense = new ExpenseModel({
-      description: 'Sample Expense',
+      purpose: 'Sample Expense',
       amount: 200,
       date: new Date(),
-      user: savedUser._id, // Reference the user
+      user: savedUser._id,
+       // Reference the user
     });
 
     // Save the expense
     const savedExpense = await newExpense.save();
+
+    const settlement = new settlementModel({
+        amount: 200,
+        data: 200,
+        user: savedUser._id,
+
+
+    })
+    const savedsettlement = await settlement.save()
 
     // Update the user with the expense reference
     const updatedUser = await userModel.findByIdAndUpdate(

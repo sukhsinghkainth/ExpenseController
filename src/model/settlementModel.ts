@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import settlement from '../interfaces/Settlement';
 
-const expenseSchema = new Schema({
+const settlementSchema = new Schema({
     amount: {
         type: Number,
         required: true,
@@ -17,10 +17,10 @@ const expenseSchema = new Schema({
     },
     status: {
         type: String,
-        default: ["pending"]
+        default: "pending"
     }
 });
 
-const settlementModel = mongoose.model<Document & settlement>('settlement', expenseSchema);
+const settlementModel = mongoose.model<Document & settlement>('Settlement', settlementSchema);
 
 export default settlementModel;

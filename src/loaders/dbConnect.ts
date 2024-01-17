@@ -11,3 +11,4 @@ export function db()  {
       console.error(`Error connecting to the database: ${error}`);
     });
 }
+

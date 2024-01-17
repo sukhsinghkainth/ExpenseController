@@ -22,7 +22,7 @@ const expenseSchema = new Schema({
     },
     status :{
         type : String,
-        default : ["pending"]
+        default : "pending"
     }
 });
 

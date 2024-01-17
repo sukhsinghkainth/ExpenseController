@@ -13,7 +13,6 @@ const UserSchema = new Schema({
         required: true,
         unique: true,
     },
-
     overallBudget: {
         type: Number,
         required: true,
@@ -25,5 +24,4 @@ const UserSchema = new Schema({
 });
 
 const UserModel = mongoose.model<IExpense & Document>('Users', UserSchema);
-
 export default UserModel;
