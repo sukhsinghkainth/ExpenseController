@@ -13,10 +13,7 @@ const UserSchema = new Schema({
         required: true,
         unique: true,
     },
-    password: {
-        type: String,
-        required: true,
-    },
+
     overallBudget: {
         type: Number,
         required: true,
@@ -25,10 +22,6 @@ const UserSchema = new Schema({
         type: Number,
         required: true,
     },
-    expenses: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Expense',
-    }]
 });
 
 const UserModel = mongoose.model<IExpense & Document>('Users', UserSchema);

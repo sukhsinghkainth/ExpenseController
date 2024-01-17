@@ -2,7 +2,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 import IUser from "../interfaces/IUser"
 
 const expenseSchema = new Schema({
-    description: {
+    purpose: {
         type: String,
         required: true,
     },
@@ -20,6 +20,10 @@ const expenseSchema = new Schema({
         ref: 'Users',
         required: true,
     },
+    status :{
+        type : String,
+        default : ["pending"]
+    }
 });
 
 const ExpenseModel = mongoose.model<Document & IUser>('Expense', expenseSchema);
