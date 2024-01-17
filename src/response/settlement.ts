@@ -17,7 +17,5 @@ export class settlement {
         this.data = data;
         this.status = status;
         this.user = user
-
-
     }
 }

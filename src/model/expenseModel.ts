@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import IUser from "../interfaces/IUser"
 
 const expenseSchema = new Schema({
     description: {
@@ -21,6 +22,6 @@ const expenseSchema = new Schema({
     },
 });
 
-const ExpenseModel = mongoose.model('Expense', expenseSchema);
+const ExpenseModel = mongoose.model<Document & IUser>('Expense', expenseSchema);
 
 export default ExpenseModel;

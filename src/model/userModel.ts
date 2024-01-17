@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
+import IExpense from "../interfaces/IExpense"
 
 const UserSchema = new Schema({
     username: {
@@ -20,7 +21,7 @@ const UserSchema = new Schema({
         type: Number,
         required: true,
     },
-    budgetLeft: {
+    amountLeft: {
         type: Number,
         required: true,
     },
@@ -30,6 +31,6 @@ const UserSchema = new Schema({
     }]
 });
 
-const UserModel = mongoose.model('Users', UserSchema);
+const UserModel = mongoose.model<IExpense & Document>('Users', UserSchema);
 
 export default UserModel;
