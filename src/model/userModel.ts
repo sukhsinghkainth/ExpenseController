@@ -1,10 +1,10 @@
+// userModel.ts
 import mongoose, { Document, Schema } from 'mongoose';
-import IExpense from "../interfaces/IExpense"
 
-const UserSchema = new Schema({
+const userSchema = new Schema({
     username: {
         type: String,
-        required: [true, "enter unique name"],
+        required: [true, "Please enter a unique name"],
         unique: true,
     },
     email: {
@@ -21,7 +21,20 @@ const UserSchema = new Schema({
         type: Number,
         required: true,
     },
+    expenses: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Expense',
+        },
+    ],
+    settlements: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Settlement',
+        },
+    ],
 });
 
-const UserModel = mongoose.model<IExpense & Document>('Users', UserSchema);
+const UserModel = mongoose.model<Document>('User', userSchema);
+
 export default UserModel;
