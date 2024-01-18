@@ -4,8 +4,6 @@ import userModel from '../model/userModel';
 import ExpenseModel from '../model/expenseModel';
 import settlementModel from '../model/settlementModel';
 
-
-
 export const addSampleData = async (req: Request, res: Response) => {
   try {
     // Create a new user
