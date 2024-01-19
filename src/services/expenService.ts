@@ -6,15 +6,13 @@ import settlementModel from '../model/settlementModel';
 
 export const addSampleData = async (req: Request, res: Response) => {
   try {
+
+    const {username , email} = req.body;
     // Create a new user
     const newUser = new userModel({
-      username: 'sika singh',
-      email: 'sikaa@gmail.com',
-      overallBudget: 500,
-      amountLeft: 400,
+      username: username,
+      email: email,
     });
-
-
     // Save the user
     const savedUser = await newUser.save();
 

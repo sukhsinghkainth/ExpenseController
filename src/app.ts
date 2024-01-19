@@ -18,6 +18,7 @@ app.use("/api/v1",userRoutes)
 
 
 
+
 app.get("/",(req:Request,res:Response)=>{
     res.send("hello ji kesi ho");
   
