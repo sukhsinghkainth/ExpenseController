@@ -9,10 +9,10 @@ const madeExpense = async (req: Request, res: Response) => {
 
     try { 
 
-        const {purpose , amount , status} = req.body;
+        const {purpose , amount , Type} = req.body;
         const username = req.params.username
  
-        if(!purpose || !amount  || !status){
+        if(!purpose || !amount  || !Type){
 console.log("all fields are required ")
         }
         
@@ -24,14 +24,14 @@ if(!user){
       });
 }
 
-if(status === "income" && user.overallBudget !== undefined)
+if(Type === "income" && user.amount !== undefined)
 {
-   user.overallBudget += amount;
+   user.amount += amount;
    user.amountLeft += amount;
    await user.save();
 }
-if( status == "expense" && user.overallBudget !== undefined){
-    if(user.overallBudget == 0 && user.amountLeft == 0 ) 
+if( Type == "expense" && user.amount !== undefined){
+    if(user.amount == 0 && user.amountLeft == 0 ) 
     {
         console.log("insufficient balance")
     }
@@ -48,16 +48,16 @@ if( status == "expense" && user.overallBudget !== undefined){
 const newExpense = new ExpenseModel({
     purpose,
     amount,
-    status,
+    Type,
     date: new Date(),
     user: user._id,
   });
 
   // Save the expense to the database
   const savedExpense = await newExpense.save();
-  user.expenses.push(savedExpense._id)
+  user.transactions.push(savedExpense._id)
   await user.save();
-  await  user.populate("expenses")
+  await  user.populate("transactions")
   res.json({
     user,
   });

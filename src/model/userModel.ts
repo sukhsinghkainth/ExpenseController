@@ -13,7 +13,7 @@ const userSchema = new Schema({
         required: true,
         unique: true,
     },
-    overallBudget: {
+    amount: {
         type: Number,
         default : 0
     },
@@ -22,7 +22,7 @@ const userSchema = new Schema({
         default : 0
       
     },
-    expenses: [
+    transactions: [
         {
             type: Schema.Types.ObjectId,
             ref: 'Expense',

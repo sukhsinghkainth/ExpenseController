@@ -20,7 +20,7 @@ const expenseSchema = new Schema({
         ref: 'Users',
         required: true,
     },
-    status :{
+    Type :{
         type : String,
         default : "pending"
     }
