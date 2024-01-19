@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import userModel from '../model/userModel';
 import ExpenseModel from '../model/expenseModel';
+import { expense } from '../response/expenseResponse';
 
 // import settlementModel from '../model/settlementModel';
 
@@ -35,14 +36,12 @@ if( status == "expense" && user.overallBudget !== undefined){
         console.log("insufficient balance")
     }
     user.amountLeft -= amount
-    if(user.amountLeft < 0)
-    {
-        console.log("insufficient balance")
-        res.json({
-            message:"insufficient balance"
-        })
-        return 
+    if (user.amountLeft < 0) {
+        return res.status(400).json({
+            message: "Insufficient balance",
+        });
     }
+    
     await user.save()
 
 }
@@ -58,10 +57,11 @@ const newExpense = new ExpenseModel({
   const savedExpense = await newExpense.save();
   user.expenses.push(savedExpense._id)
   await user.save();
+  await  user.populate("expenses")
   res.json({
     user,
-    expense: savedExpense,
   });
+  console.log(user)
 
 
      } catch (error: unknown) {
