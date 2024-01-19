@@ -22,7 +22,7 @@ const expenseSchema = new Schema({
     },
     Type :{
         type : String,
-        default : "pending"
+        enum : ["income","expense"]
     }
 });
 
