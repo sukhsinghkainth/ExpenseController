@@ -13,29 +13,22 @@ const userSchema = new Schema({
         required: true,
         unique: true,
     },
-    amount: {
+    totalIncome: {
         type: Number,
-        default : 0
+        default: 0
     },
-    amountLeft: {
+    totalExpense: {
         type: Number,
-        default : 0
-      
+        default: 0
     },
     transactions: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Expense',
-        },
-    ],
-    settlements: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Settlement',
+            ref: 'Transaction',
         },
     ],
 });
 
-const UserModel = mongoose.model<Document &  IUser>('User', userSchema);
+const UserModel = mongoose.model<Document & IUser>('User', userSchema);
 
 export default UserModel;

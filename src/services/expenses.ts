@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
 import userModel from '../model/userModel';
-import ExpenseModel from '../model/expenseModel';
+import ExpenseModel from '../model/transactionSchema';
+import {expense} from "../response/expenseResponse"
 
 // import settlementModel from '../model/settlementModel';
 
-const madeExpense = async (req: Request, res: Response) => {
+const madeExpense = async (req: Request, res: Response) :Promise<expense>=> {
 
     try {
 
