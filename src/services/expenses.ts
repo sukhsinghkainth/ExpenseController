@@ -5,7 +5,7 @@ import {expense} from "../response/expenseResponse"
 
 // import settlementModel from '../model/settlementModel';
 
-const madeExpense = async (req: Request, res: Response) :Promise<expense>=> {
+const madeExpense = async (req: Request, res: Response) => {
 
     try {
 
