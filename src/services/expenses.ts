@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import userModel from '../model/userModel';
 import ExpenseModel from '../model/transactionSchema';
-import {expense} from "../response/expenseResponse"
+// import {expense} from "../response/expenseResponse"
 
 // import settlementModel from '../model/settlementModel';
 

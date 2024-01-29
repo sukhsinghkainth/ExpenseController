@@ -2,21 +2,26 @@ import mongoose, { Document, Schema } from 'mongoose';
 import Account from '../interfaces/IAccount';
 
 const accountSchema = new Schema({
-
-    name: {
-        type: String,
-        required: true
-
-    },
-    accountType: {
-        type: String,
-        enum: ["card", "cash", "savings", "custom"],
-        required: true
-    },
-    initialAmount: {
-        type: Number,
-        default: 0
-    }
+acctype :{
+    type: String,
+    enum : ["savings" , "card", "cash"]
+},
+    transaction: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Transaction',
+        },
+    ],
+    user: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+        },
+    ],
+    created_at: {
+        type: Date,
+        default: Date.now
+      }
 
 
 });

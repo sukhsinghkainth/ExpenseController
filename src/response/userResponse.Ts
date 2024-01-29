@@ -1,5 +1,6 @@
 export  class userResponse {
     user: string;
+    _id?: string;
     username: string;
     email: string;
     budget: number;
@@ -14,6 +15,7 @@ export  class userResponse {
         remainingAmount: number
     ) {
         this.user = user;
+        this._id = _id;
         this.username = username;
 
         this.email = email;

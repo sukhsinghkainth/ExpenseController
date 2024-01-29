@@ -13,6 +13,26 @@ const BudgetSchema = new Schema({
         required: true
     },
 
+    spent: {
+        type: Number,
+       
+    },
+    remaininglimit: {
+        type: Number,
+     
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+
+    },
+    budget: {
+        type: Schema.Types.ObjectId,
+        ref: "Budget",
+
+    },
+  
+  
 });
 
 const budgetModel = mongoose.model<Document & budget>('Budget', BudgetSchema);

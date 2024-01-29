@@ -21,10 +21,16 @@ const userSchema = new Schema({
         type: Number,
         default: 0
     },
-    transactions: [
+    account: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Transaction',
+            ref: 'Account',
+        },
+    ],
+    budget: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Budget',
         },
     ],
 });
