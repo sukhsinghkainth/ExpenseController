@@ -1,35 +1,33 @@
-
-import express, {Response, Request} from 'express';
+import express, { Application, Request, Response } from 'express';
 import config from './config/config';
-import { db } from "./loaders/dbConnect"
-import userRoutes from "./api/routes/userRoutes"
+import { db } from './loaders/dbConnect';
+import userRoutes from './api/routes/userRoutes';
 
+const app: Application = express();
 
- function startServer() {
-    
-    const app = express();
-     //connect to the database   
- db();
+app.use(express.json());
+app.use('/api/v1', userRoutes);
 
+app.get('/', (req: Request, res: Response) => {
+  res.send('Hello, how are you?');
+});
 
-   app.use(express.json());
-   
-app.use("/api/v1",userRoutes)
+// Error handling middleware
+app.use((err: Error, req: Request, res: Response, next: Function) => {
+    console.error(err.stack);
+    res.status(500).send('Something went wrong.');
+  });
 
-
-
-
-app.get("/",(req:Request,res:Response)=>{
-    res.send("hello ji kesi ho");
-  
-})
-
+function startServer() {
+  try {
+    db();
     app.listen(config.port, () => {
-        console.log("server running")
-    }).on("error",err=>{
-        console.log(`error ${err}`)
-        process.exit(1);
-    })
-
+      console.log(`Server running on port ${config.port}`);
+    });
+  } catch (err) {
+    console.error('Error starting server:', err);
+    process.exit(1);
+  }
 }
+
 startServer();

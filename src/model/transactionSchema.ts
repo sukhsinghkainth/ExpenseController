@@ -1,14 +1,16 @@
-import mongoose, { Document, Schema } from 'mongoose';
-import ITransactions from "../interfaces/ITransactions"
+import mongoose, { Document, Model, Schema } from 'mongoose';
+import ITransactions  from "../interfaces/ITransactions";
+import { categoryType } from '../interfaces/ICategory';
 
-const TransactionSchema = new Schema({
+
+const TransactionSchema = new Schema<ITransactions>({
     amount: {
         type: Number,
         required: true,
     },
     type : {
         type: String,
-        enum : ["expenese" , "income"]
+        enum : categoryType
 
     },
     account :{
@@ -41,6 +43,6 @@ const TransactionSchema = new Schema({
  
 });
 
-const transactionModel = mongoose.model<Document & ITransactions>('Transaction', TransactionSchema);
+const transactionModel : Model<ITransactions> = mongoose.model<ITransactions>('Transaction', TransactionSchema);
 
 export default transactionModel;

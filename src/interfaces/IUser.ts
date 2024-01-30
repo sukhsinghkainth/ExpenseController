@@ -5,6 +5,6 @@ export default interface User {
     email: string;
     totalIncome: number
     totalExpense : number
-    transactions : mongoose.Types.ObjectId[];
+    account : mongoose.Types.ObjectId[];
     budget ?: mongoose.Types.ObjectId[];
   }

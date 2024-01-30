@@ -1,7 +1,7 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Model, Schema } from 'mongoose';
 import budget from '../interfaces/IBudget';
 
-const BudgetSchema = new Schema({
+const BudgetSchema = new Schema<budget>({
 
     category: {
         type: Schema.Types.ObjectId,
@@ -15,26 +15,19 @@ const BudgetSchema = new Schema({
 
     spent: {
         type: Number,
-       
+
     },
     remaininglimit: {
         type: Number,
-     
+
     },
     user: {
         type: Schema.Types.ObjectId,
         ref: "User",
 
     },
-    budget: {
-        type: Schema.Types.ObjectId,
-        ref: "Budget",
-
-    },
-  
-  
 });
 
-const budgetModel = mongoose.model<Document & budget>('Budget', BudgetSchema);
+const budgetModel: Model<budget> = mongoose.model<budget>('Budget', BudgetSchema);
 
 export default budgetModel;

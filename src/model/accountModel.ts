@@ -1,31 +1,28 @@
-import mongoose, { Document, Schema } from 'mongoose';
-import Account from '../interfaces/IAccount';
+import mongoose, { Schema, model, Model } from 'mongoose';
+import IAccount ,{ AccountType }from '../interfaces/IAccount';
 
-const accountSchema = new Schema({
-acctype :{
-    type: String,
-    enum : ["savings" , "card", "cash"]
-},
-    transaction: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'Transaction',
-        },
-    ],
-    user: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
-        },
-    ],
-    created_at: {
+const accountSchema = new Schema<IAccount>({
+    accountType: {
+        type: String,
+        enum: AccountType,
+        required: true,
+    },
+    transactions: {
+        type: [Schema.Types.ObjectId],
+        ref: 'Transaction',
+    },
+    users: {
+        type: [Schema.Types.ObjectId],
+        ref: 'User',
+    },
+    createdAt: {
         type: Date,
-        default: Date.now
-      }
-
-
+        default: Date.now,
+    },
 });
 
-const accountModel = mongoose.model<Document & Account>('Account', accountSchema);
+accountSchema.index({ accountType: 1 });
 
-export default accountModel;
+const Account: Model<IAccount> = model<IAccount>('Account', accountSchema);
+
+export default Account;

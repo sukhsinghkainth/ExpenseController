@@ -1,25 +1,32 @@
-export  class userResponse {
-    user: string;
-    _id?: string;
+import mongoose from "mongoose";
+
+export default class userResponse {
+    _id?: mongoose.Types.ObjectId;
     username: string;
     email: string;
-    budget: number;
-    remainingAmount: number
-    constructor(
-        user: string,
-        _id: string,
-        username: string,
+    totalIncome?: number;
+    totalExpense?: number;
+    account?: mongoose.Types.ObjectId[];
+    budget?: mongoose.Types.ObjectId[];
 
+    constructor(
+        username: string,
         email: string,
-        budget: number,
-        remainingAmount: number
+        _id?: mongoose.Types.ObjectId,
+        totalIncome?: number,
+        totalExpense?: number,
+        account?: mongoose.Types.ObjectId[],
+        budget?: mongoose.Types.ObjectId[],
+
     ) {
-        this.user = user;
+
         this._id = _id;
         this.username = username;
-
         this.email = email;
+        this.totalIncome = totalIncome;
+        this.totalExpense = totalExpense;
+        this.account = account;
         this.budget = budget;
-        this.remainingAmount = remainingAmount
+
     }
 }
