@@ -6,14 +6,24 @@ import userResponse from '../../response/userResponse';
 const router = express.Router();
 const userService = new createUserService();
 
+const usernameRegex = /^[a-zA-Z_]+$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+
 router.post("/createuser", async (req: Request, res: Response) => {
     const { username, email } = req.body;
+    if (!usernameRegex.test(username)) {
+        return res.status(400).json({ error: 'Invalid username format' });
+      }
     if (!username || !email) {
         return res.status(400).json({ error: 'Username and email are required' })
     }
     if (typeof username !== 'string' || typeof email !== 'string') {
         return res.status(400).json({ error: 'Invalid username or email' })
     }
+    if (!emailRegex.test(email)) {
+        return res.status(400).json({ error: 'Invalid email address' });
+      }
     try {
         const newUser = await userService.createUser({ username, email });
         const userResp = new userResponse(newUser.username, newUser.email,);
@@ -21,8 +31,8 @@ router.post("/createuser", async (req: Request, res: Response) => {
             user: userResp,
         });
     } catch (error: any) {
-        console.log(error.message)
-        res.status(400).json({ error });
+        console.error(error.message)
+        res.status(500).json({ error });
     }
 
 })

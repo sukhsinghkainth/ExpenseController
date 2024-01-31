@@ -2,11 +2,6 @@ import userModel from '../model/userModel';
 class createUserService{
      async createUser(userdata: {username:string, email : string}){
         const {username, email} = userdata;
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-          console.log('Invalid email format');
-          throw new Error('Invalid email format');
-        }
         const  existingUser = await userModel.findOne({ $or:[{username},{email}]});
         if (existingUser) {
             throw new Error('user already exist');
