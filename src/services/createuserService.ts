@@ -13,6 +13,8 @@ class createUserService{
 }
 export default createUserService;
 
+
+
 // const createuser = async (req: Request, res: Response) => {
 
 //     try {

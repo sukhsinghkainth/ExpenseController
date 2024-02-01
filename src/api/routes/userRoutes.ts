@@ -6,29 +6,30 @@ import userResponse from '../../response/userResponse';
 const router = express.Router();
 const userService = new createUserService();
 
-const usernameRegex = /^[a-zA-Z_]+$/;
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const usernameRegex : RegExp = /^[a-zA-Z_]+$/;
+const emailRegex :RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 
 router.post("/createuser", async (req: Request, res: Response) => {
     const { username, email } = req.body;
     if (!usernameRegex.test(username)) {
-        return res.status(400).json({ error: 'Invalid username format' });
+         res.status(400).json({ error: 'Invalid username format' });
       }
     if (!username || !email) {
-        return res.status(400).json({ error: 'Username and email are required' })
+         res.status(400).json({ error: 'Username and email are required' })
     }
     if (typeof username !== 'string' || typeof email !== 'string') {
-        return res.status(400).json({ error: 'Invalid username or email' })
+         res.status(400).json({ error: 'Invalid username or email' })
     }
     if (!emailRegex.test(email)) {
-        return res.status(400).json({ error: 'Invalid email address' });
+         res.status(400).json({ error: 'Invalid email address' });
       }
     try {
         const newUser = await userService.createUser({ username, email });
-        const userResp = new userResponse(newUser.username, newUser.email,);
+        const userResp = new userResponse(newUser.username, newUser.email);
         res.status(201).json({
             user: userResp,
+            messaage : "user created successfully"
         });
     } catch (error: any) {
         console.error(error.message)
