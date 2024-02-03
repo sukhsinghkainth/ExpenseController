@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 
 export default interface User {
+    _id?: mongoose.Types.ObjectId;
     username: string;
     email: string;
-    totalIncome: number
-    totalExpense : number
-    account : mongoose.Types.ObjectId[];
+    password : string;
+    totalIncome?: number
+    totalExpense? : number
+    account ?: mongoose.Types.ObjectId[];
     budget ?: mongoose.Types.ObjectId[];
   }

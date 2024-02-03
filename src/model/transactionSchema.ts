@@ -16,13 +16,13 @@ const TransactionSchema = new Schema<ITransactions>({
     account :{
             type : Schema.Types.ObjectId,
             ref : "Account",
-            required : true,
+            // required : true,
     },
     category :
     {
         type : Schema.Types.ObjectId,
         ref : "Category",
-        required : true,
+        // required : true,
     },
     date: {
         type: Date,
@@ -38,7 +38,7 @@ const TransactionSchema = new Schema<ITransactions>({
     {
         type : Schema.Types.ObjectId,
         ref : "User",
-        required : true,
+        // required : true,
     },
  
 });

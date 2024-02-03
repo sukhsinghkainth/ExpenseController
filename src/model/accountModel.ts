@@ -1,7 +1,8 @@
-import mongoose, { Schema, model, Model } from 'mongoose';
+import { Schema, model, Model } from 'mongoose';
 import IAccount ,{ AccountType }from '../interfaces/IAccount';
 
 const accountSchema = new Schema<IAccount>({
+
     accountType: {
         type: String,
         enum: AccountType,

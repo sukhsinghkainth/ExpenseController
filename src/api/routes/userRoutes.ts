@@ -1,35 +1,66 @@
 // user.routes.ts
 import express, { Request, Response } from 'express';
 import createUserService from "../../services/createuserService"
-import userResponse from '../../response/userResponse';
+import User from '../../interfaces/IUser';
+import { authService } from '../../services/authService';
+
 
 const router = express.Router();
 const userService = new createUserService();
 
-const usernameRegex : RegExp = /^[a-zA-Z_]+$/;
-const emailRegex :RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const usernameRegex: RegExp = /^[a-zA-Z_]+$/;
+const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 
-router.post("/createuser", async (req: Request, res: Response) => {
-    const { username, email } = req.body;
-    if (!usernameRegex.test(username)) {
-         res.status(400).json({ error: 'Invalid username format' });
-      }
-    if (!username || !email) {
-         res.status(400).json({ error: 'Username and email are required' })
+
+router.post("/login", async (req: Request, res: Response) => {
+
+    try {
+        const { email, password } = req.body as User;
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                Message: "please fill the detiail",
+            });
+        }
+        const { user, token } = await authService.login(email, password)
+
+        const Response = createUserService.transformUserResponse(user);
+
+        return res.json({ Response, token })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "login fail INVALID CREDENTIAL",
+        });
     }
-    if (typeof username !== 'string' || typeof email !== 'string') {
-         res.status(400).json({ error: 'Invalid username or email' })
+
+})
+router.post("/signup", async (req: Request, res: Response) => {
+    const { username, email, password } = req.body;
+
+    if (!username || !email || !password) {
+        return res.status(400).json({ error: 'Username and email are required' })
+    }
+    if (typeof username !== 'string' || typeof email !== 'string' || typeof password !== "string") {
+        return res.status(400).json({ error: 'Invalid username or email' })
+    }
+    if (!usernameRegex.test(username)) {
+        return res.status(400).json({ error: 'Invalid username format' });
     }
     if (!emailRegex.test(email)) {
-         res.status(400).json({ error: 'Invalid email address' });
-      }
+        return res.status(400).json({ error: 'Invalid email address' });
+    }
     try {
-        const newUser = await userService.createUser({ username, email });
-        const userResp = new userResponse(newUser.username, newUser.email);
+        const data = await userService.createUser({
+            username, email, password,
+        });
+
+        const Response = createUserService.transformUserResponse(data);
         res.status(201).json({
-            user: userResp,
-            messaage : "user created successfully"
+            Response,
+            messaage: "user created successfully"
         });
     } catch (error: any) {
         console.error(error.message)

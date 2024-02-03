@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export default class userResponse {
+export  class userResponse {
     _id?: mongoose.Types.ObjectId;
     username: string;
     email: string;
