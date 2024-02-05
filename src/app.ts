@@ -3,10 +3,17 @@ import config from './config/config';
 import { db } from './loaders/dbConnect';
 import userRoutes from './api/routes/userRoutes';
 
+
+import cookieParser from "cookie-parser";
+
 const app: Application = express();
 
 app.use(express.json());
+
+app.use(cookieParser());
+
 app.use('/api/v1', userRoutes);
+
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello, how are you?');

@@ -4,7 +4,7 @@ import bcrypt from "bcrypt"
 import { userResponse } from '../response/userResponse';
 class createUserService{
     public static transformUserResponse(user: User): userResponse {
-        return new userResponse(user.username, user.email);
+        return new userResponse(user.username, user.email );
     }
      async createUser(userdata: User){
         const {username, email , password} = userdata;

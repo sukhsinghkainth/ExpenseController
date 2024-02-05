@@ -3,6 +3,8 @@ import express, { Request, Response } from 'express';
 import createUserService from "../../services/createuserService"
 import User from '../../interfaces/IUser';
 import { authService } from '../../services/authService';
+import auth from './middlewares/isAuth';
+import UserModel from '../../model/userModel';
 
 
 const router = express.Router();
@@ -24,9 +26,11 @@ router.post("/login", async (req: Request, res: Response) => {
             });
         }
         const { user, token } = await authService.login(email, password)
-
+        res.cookie("token", token, {
+            expires: new Date(Date.now() + 3 * 3600 * 1000),
+             httpOnly: true
+        })
         const Response = createUserService.transformUserResponse(user);
-
         return res.json({ Response, token })
     } catch (error) {
         console.log(error);
@@ -37,6 +41,23 @@ router.post("/login", async (req: Request, res: Response) => {
     }
 
 })
+
+router.get("/test", auth, async (req, res) => {
+    try {
+        const id = req.user.id;
+        const email = req.user.email
+        console.log(id, email);
+        const u = await UserModel.findById(id);
+
+        res.json({
+            message: "hello ji",
+            u
+        })
+    } catch (error) {
+        console.error(error)
+    }
+})
+
 router.post("/signup", async (req: Request, res: Response) => {
     const { username, email, password } = req.body;
 

@@ -13,13 +13,11 @@ export class authService{
             let user = await UserModel.findOne({  email  });
             if(!user || !await bcrypt.compare(password, user.password))
             {
-                throw new Error("user not registered")
+                throw new Error("user not registered or password incorrect")
             }
             const token = this.generateToken(user);
-            user = user.toObject();
-            Reflect.deleteProperty(user, 'password');
             return {user, token};
-
+            
         } catch (error) {
             console.log(`Error in Auth Service ${error}`);
             throw error;
@@ -30,15 +28,17 @@ export class authService{
         const {JWT_KEY} = config ;
         if (!JWT_KEY) {
             throw new Error("JWT secret key not found in config");
-          }
+        }
         const payload = {
             email: user.email,
             id: user._id,
-          };
-          let Token = jwt.sign(payload, JWT_KEY!, {
-            expiresIn: "1h",
-          });
-          return Token;
+        };
+        let Token = jwt.sign(payload, JWT_KEY!, {
+            expiresIn: "2h",
+        });
+        user = user.toObject();
+        user.token = Token ;
+        return Token;
 
     }
 
