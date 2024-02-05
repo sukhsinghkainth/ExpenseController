@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 export enum categoryType {
-    EXPENSE = 'expense',
-    INCOME = 'income',
+    expense = 'expense',
+    income = 'income',
 }
 export default interface category {
     name : string ;

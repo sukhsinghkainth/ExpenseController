@@ -5,7 +5,8 @@ import User from '../../interfaces/IUser';
 import { authService } from '../../services/authService';
 import auth from './middlewares/isAuth';
 import UserModel from '../../model/userModel';
-
+import ReqWithUser from '../../interfaces/Ireq';
+import createCategoryService from '../../services/categoryService';
 
 const router = express.Router();
 const userService = new createUserService();
@@ -28,7 +29,7 @@ router.post("/login", async (req: Request, res: Response) => {
         const { user, token } = await authService.login(email, password)
         res.cookie("token", token, {
             expires: new Date(Date.now() + 3 * 3600 * 1000),
-             httpOnly: true
+            httpOnly: true
         })
         const Response = createUserService.transformUserResponse(user);
         return res.json({ Response, token })
@@ -42,10 +43,10 @@ router.post("/login", async (req: Request, res: Response) => {
 
 })
 
-router.get("/test", auth, async (req, res) => {
+router.get("/test", auth, async (req: ReqWithUser, res: Response) => {
     try {
-        const id = req.user.id;
-        const email = req.user.email
+        const id = req.user?.id;
+        const email = req.user?.email
         console.log(id, email);
         const u = await UserModel.findById(id);
 

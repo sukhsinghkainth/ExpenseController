@@ -3,8 +3,9 @@ import config from './config/config';
 import { db } from './loaders/dbConnect';
 import userRoutes from './api/routes/userRoutes';
 
-
+import categoryRoutes from "./api/categoryRoutes"
 import cookieParser from "cookie-parser";
+import isAuth from './api/routes/middlewares/isAuth';
 
 const app: Application = express();
 
@@ -13,6 +14,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use('/api/v1', userRoutes);
+app.use('/api/v1',isAuth, categoryRoutes);
+
 
 
 app.get('/', (req: Request, res: Response) => {
@@ -21,9 +24,9 @@ app.get('/', (req: Request, res: Response) => {
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: Function) => {
-    console.error(err.stack);
-    res.status(500).send('Something went wrong.');
-  });
+  console.error(err.stack);
+  res.status(500).send('Something went wrong.');
+});
 
 function startServer() {
   try {

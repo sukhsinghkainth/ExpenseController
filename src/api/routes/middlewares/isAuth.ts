@@ -1,12 +1,8 @@
 import jwt from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
+import {Response, NextFunction } from 'express';
 import User from '../../../interfaces/IUser';
 import config from '../../../config/config';
-import { log } from 'console';
-
-interface ReqWithUser extends Request {
-  user?: User;
-}
+import ReqWithUser from '../../../interfaces/Ireq';
 
 const isAuth = (req: ReqWithUser, res: Response, next: NextFunction) => {    
   const token = req.cookies.token ||req.header('Authorization')?.replace('Bearer ', '') || req.body.token;

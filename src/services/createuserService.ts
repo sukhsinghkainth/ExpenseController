@@ -6,7 +6,7 @@ class createUserService{
     public static transformUserResponse(user: User): userResponse {
         return new userResponse(user.username, user.email );
     }
-     async createUser(userdata: User){
+     async createUser(userdata: User):Promise<User>{
         const {username, email , password} = userdata;
         const  existingUser = await userModel.findOne({ $or:[{username},{email}]});
         if (existingUser) {
