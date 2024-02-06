@@ -30,7 +30,9 @@ router.put('/editCategory/:categoryname', async (req: Request, res: Response) =>
         if (!(type in categoryType)) {
             return res.status(400).json({ error: 'Invalid category type' });
         }
-        const updatedCategory = await createCategory.updateCategory(categoryname, { name, type });
+        const updatedCategory = await createCategory.updateCategory(categoryname, {
+            name, type
+        });
         return res.status(200).json(updatedCategory);
     } catch (error) {
         console.error(error);

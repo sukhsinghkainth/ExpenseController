@@ -6,6 +6,7 @@ import userRoutes from './api/routes/userRoutes';
 import categoryRoutes from "./api/categoryRoutes"
 import cookieParser from "cookie-parser";
 import isAuth from './api/routes/middlewares/isAuth';
+import budgetRoutes from "./api/routes/budgetRoutes"
 
 const app: Application = express();
 
@@ -15,7 +16,7 @@ app.use(cookieParser());
 
 app.use('/api/v1', userRoutes);
 app.use('/api/v1',isAuth, categoryRoutes);
-
+app.use('/api/v1',isAuth, budgetRoutes);
 
 
 app.get('/', (req: Request, res: Response) => {
