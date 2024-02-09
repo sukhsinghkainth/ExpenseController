@@ -6,9 +6,23 @@ import ReqWithUser from '../interfaces/Ireq';
 import accounts, { AccountType } from '../interfaces/IAccount';
 import transaction from '../interfaces/ITransactions';
 import UserModel from '../model/userModel';
+import category from '../interfaces/ICategory';
+import categoryModel from '../model/categoryModel';
 
 class IncomeService {
       
+     static async getcategoryId(name : category):Promise<category>{
+      if (!name) {
+        throw new Error('Category name is required');
+      }
+
+      const category = await categoryModel.findOne({ name: name });
+  
+      if (!category || category.type !== 'income') {
+        return Promise.reject("invalid category")
+      }
+       return category
+     }
 
     static async getAccountsByUser(userId: string): Promise<accounts[]> {
         return AccountModel.find({ users: userId }).exec();
@@ -21,6 +35,8 @@ class IncomeService {
 
   static async createAccount(req: ReqWithUser, typeofAccount: AccountType): Promise<accounts> {
     const user = req.user ;
+
+    
     if(!user)
     {
         throw new Error("Unauthorized");

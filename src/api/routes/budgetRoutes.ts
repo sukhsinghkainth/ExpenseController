@@ -9,13 +9,13 @@ const router = express.Router();
 
 router.post('/setBudget', async (req: ReqWithUser, res: Response) => {
   try {
-    const { categoryId, limit } = req.body;
+    const { categoryName, limit } = req.body;
 
-    if (!categoryId || !limit) {
+    if (!categoryName || !limit) {
       return res.status(400).json({ error: 'Category ID and limit are required' });
     }
 
-    await setBudgetService.setBudget(req, categoryId, limit);
+    await setBudgetService.setBudget(req, categoryName, limit);
 
     res.status(200).json({ message: 'Budget set successfully' });
   } catch (error) {
