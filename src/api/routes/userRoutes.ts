@@ -6,14 +6,10 @@ import { authService } from '../../services/authService';
 import auth from './middlewares/isAuth';
 import UserModel from '../../model/userModel';
 import ReqWithUser from '../../interfaces/Ireq';
+import { emit } from 'process';
 
 const router = express.Router();
 const userService = new createUserService();
-
-const usernameRegex: RegExp = /^[a-zA-Z_]+$/;
-const emailRegex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-
 
 router.post("/login", async (req: Request, res: Response) => {
 
@@ -61,18 +57,7 @@ router.get("/test", auth, async (req: ReqWithUser, res: Response) => {
 router.post("/signup", async (req: Request, res: Response) => {
     const { username, email, password } = req.body;
 
-    if (!username || !email || !password) {
-        return res.status(400).json({ error: 'Username and email are required' })
-    }
-    if (typeof username !== 'string' || typeof email !== 'string' || typeof password !== "string") {
-        return res.status(400).json({ error: 'Invalid username or email' })
-    }
-    if (!usernameRegex.test(username)) {
-        return res.status(400).json({ error: 'Invalid username format' });
-    }
-    if (!emailRegex.test(email)) {
-        return res.status(400).json({ error: 'Invalid email address' });
-    }
+       createUserService.validataUser(username,email,password)
     try {
         const data = await userService.createUser({
             username, email, password,
