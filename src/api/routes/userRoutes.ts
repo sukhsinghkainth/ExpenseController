@@ -6,7 +6,7 @@ import { authService } from '../../services/authService';
 import auth from './middlewares/isAuth';
 import UserModel from '../../model/userModel';
 import ReqWithUser from '../../interfaces/Ireq';
-import { emit } from 'process';
+
 
 const router = express.Router();
 const userService = new createUserService();

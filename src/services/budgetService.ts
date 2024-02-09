@@ -63,6 +63,7 @@ class SetBudgetService {
       
           existingBudget.limit = limit;
           existingBudget.remaininglimit = limit;
+    
           await existingBudget.save();
       
         } catch (error) {

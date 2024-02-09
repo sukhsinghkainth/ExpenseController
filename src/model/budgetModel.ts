@@ -15,6 +15,7 @@ const BudgetSchema = new Schema<budget>({
 
     spent: {
         type: Number,
+        default : 0
 
     },
     remaininglimit: {

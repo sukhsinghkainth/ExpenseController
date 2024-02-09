@@ -6,7 +6,7 @@ import ReqWithUser from '../interfaces/Ireq';
 import accounts, { AccountType } from '../interfaces/IAccount';
 import transaction from '../interfaces/ITransactions';
 import UserModel from '../model/userModel';
-import category from '../interfaces/ICategory';
+import category, { categoryType } from '../interfaces/ICategory';
 import categoryModel from '../model/categoryModel';
 
 class IncomeService {
@@ -28,9 +28,9 @@ class IncomeService {
         return AccountModel.find({ users: userId }).exec();
       }
     
-      static async getTransactionsByAccounts(accounts: accounts[]): Promise<transaction[]> {
+      static async getTransactionsByAccounts(accounts: accounts[] , type : categoryType): Promise<transaction[]> {
         const accountIds = accounts.map(account => account.id);
-        return TransactionModel.find({ account: { $in: accountIds }, type: 'income' }).exec();
+        return TransactionModel.find({ account: { $in: accountIds }, type: type }).exec();
       }
 
   static async createAccount(req: ReqWithUser, typeofAccount: AccountType): Promise<accounts> {
@@ -54,7 +54,7 @@ class IncomeService {
     return newAccount;
   }
 
-  static async createIncome(req: ReqWithUser, amount: number, notes: string, accountId: string, categoryId: string , typeofAccount : AccountType): Promise<transaction> {
+  static async createIncome(req: ReqWithUser, amount: number, notes: string, accountId: string, categoryId: string , typeofAccount : AccountType , type : categoryType): Promise<transaction> {
     const user = req.user ;
     if(!user)
     {
@@ -81,6 +81,15 @@ class IncomeService {
         { users: user.id, accountType: typeofAccount},
         { $push: { transactions: newTransaction.id } }
       );
+
+
+    
+      const accounts = await IncomeService.getAccountsByUser(user.id);
+      const transactions = await IncomeService.getTransactionsByAccounts(accounts , type );
+      const totalIncome = transactions.reduce((acc: number, transaction: { amount: number; }) => acc + transaction.amount, 0);
+      await UserModel.updateOne({ _id : user.id},{ $set:{ "totalIncome": totalIncome  } })
+
+    
     return newTransaction;
   }
 }
