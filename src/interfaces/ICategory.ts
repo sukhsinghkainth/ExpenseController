@@ -8,5 +8,4 @@ export default interface category {
     _id ?: string;
     name : string ;
     type : categoryType;
-    budget?: mongoose.Types.ObjectId; 
 }

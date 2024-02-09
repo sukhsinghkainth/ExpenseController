@@ -1,10 +1,9 @@
 import express, { Request, Response } from 'express';
 import ReqWithUser from '../../interfaces/Ireq';
-import isAuth from './middlewares/isAuth';
 import setBudgetService from '../../services/budgetService';
-// import setBudgetService from '../../services/setBudgetService';
-// import BudgetModel from '../../model/budgetModel';
-// import { isAuth } from '../../middlewares/isAuth';
+import transaction from '../../interfaces/ITransactions';
+import Account, { AccountType } from '../../interfaces/IAccount';
+
 
 const router = express.Router();
 
@@ -24,5 +23,43 @@ router.post('/setBudget', async (req: ReqWithUser, res: Response) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+router.put('/updateBudget', async (req: ReqWithUser, res: Response) => {
+  try {
+    const { categoryName, limit } = req.body;
+
+    if (!categoryName || !limit) {
+      return res.status(400).json({ error: 'Category name and limit are required' });
+    }
+
+    await setBudgetService.updateBudget(req, categoryName, limit);
+
+    res.status(200).json({ message: 'Budget updated successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// delete budget route 
+
+router.delete('/deleteBudget', async (req: ReqWithUser, res: Response) => {
+  try {
+    const { categoryName } = req.body;
+
+    if (!categoryName) {
+      return res.status(400).json({ error: 'Category name is required' });
+    }
+
+    await setBudgetService.deleteBudget(req, categoryName);
+
+    res.status(200).json({ message: 'Budget deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
 
 export default router;

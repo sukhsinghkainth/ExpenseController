@@ -10,10 +10,6 @@ const categorySchema = new Schema<ICategory>({
         enum: categoryType,
         required: true
     },
-    budget: {
-        type: Schema.Types.ObjectId,
-        ref: "Budget",
-    }
     
 });
 

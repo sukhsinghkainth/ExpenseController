@@ -6,7 +6,8 @@ export enum AccountType {
     CASH = 'cash'
 }
 
-export default interface Account {
+export default interface accounts {
+    [x: string]: any;
     accountType: AccountType;
     transactions: mongoose.Types.ObjectId[];
     users: mongoose.Types.ObjectId[];
