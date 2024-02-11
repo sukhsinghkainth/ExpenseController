@@ -4,6 +4,7 @@ import transactionModel from '../model/transactionSchema';
 import CategoryModel from '../model/categoryModel';
 import category, { categoryType } from '../interfaces/ICategory';
 import UserModel from '../model/userModel';
+import budgetModel from '../model/budgetModel';
 
 class SetBudgetService {
 
@@ -108,6 +109,20 @@ class SetBudgetService {
         } catch (error) {
             console.error(error);
             throw new Error('Error retrieving category');
+        }
+    }
+    static async viewBudget(req:ReqWithUser)
+    {
+        if(!req.user)
+        {
+            throw new Error("Unauthorized")
+        }
+        try {
+        return await budgetModel.find({user : req.user.id})
+          .populate("category").exec()  
+          
+        } catch (error) {
+            throw new Error(`error while fetching categories ${error}`)
         }
     }
 }
