@@ -1,10 +1,17 @@
 
 import category, { categoryType } from '../interfaces/ICategory';
+import categoryModel from '../model/categoryModel';
 import CategoryModel from '../model/categoryModel';
 import transactionModel from '../model/transactionSchema';
+import { categoryResponse } from '../response/categoryResponse';
 
 export default class CategoryService {
-
+  transformCategory(categories: category[]): categoryResponse[] {
+    return categories.map(category => new categoryResponse(category.name, category.type));
+  }
+  async getAllCategories(): Promise<category[]> {
+    return await categoryModel.find()
+}
   async deleteCategory(name: string): Promise<void> {
     try {
       const category = await CategoryModel.findOne({ name });

@@ -2,6 +2,7 @@
 import express, { Request, Response } from 'express';
 import CategoryService from '../../services/categoryService';
 import category, { categoryType } from '../../interfaces/ICategory';
+import categoryModel from '../../model/categoryModel';
 const router = express.Router();
 const createCategory = new CategoryService();
 
@@ -53,6 +54,17 @@ router.delete('/deleteCategory/:categoryName', async (req: Request, res: Respons
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+router.get("/allcategories", async(req:Request, res: Response)=>{
+    try {
+        const categories = createCategory.getAllCategories();
+      const   categoryRes  = createCategory.transformCategory(await categories);
+      res.json(categoryRes);
+        
+    } catch (error) {
+        
+    }
+})
 
 
 export default router;

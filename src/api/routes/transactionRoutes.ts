@@ -1,11 +1,48 @@
 
-import express, { Response } from 'express';
+import express, { Request, Response, response } from 'express';
 import ReqWithUser from '../../interfaces/Ireq';
 import IncomeService from '../../services/incomeService';
 import ExpenseService from '../../services/expenseService';
+import transactionModel from '../../model/transactionSchema';
+import { categoryType } from '../../interfaces/ICategory';
 
 const router = express.Router();
 
+router.get('/all-expense-transaction', async (req: ReqWithUser, res:Response) => {
+  try {
+    // get all transaction 
+ const type = categoryType.expense
+ const transactions = await IncomeService.allTransactions(req, type);
+
+  return   res.json(transactions)
+    
+  } catch (error) {
+    console.error(error)
+  }
+})
+router.get('/all-income-transaction', async (req: ReqWithUser, res:Response) => {
+  try {
+    // get all transaction 
+ const type = categoryType.income
+ const transactions = await IncomeService.allTransactions(req, type);
+
+  return   res.json(transactions)
+    
+  } catch (error) {
+    console.error(error)
+  }
+})
+router.get('/alltransaction', async (req: ReqWithUser, res:Response) => {
+  try {
+    // get all transaction 
+ const transactions = await IncomeService.allTransactions(req);
+
+  return   res.json(transactions)
+    
+  } catch (error) {
+    console.error(error)
+  }
+})
 router.post('/income' ,  async (req: ReqWithUser, res: Response) => {
     try {
       const { amount, type, notes, accountType, categoryName } = req.body;
@@ -30,24 +67,6 @@ router.post('/income' ,  async (req: ReqWithUser, res: Response) => {
     }
   });
 
-//   router.get('/total-income', async (req : ReqWithUser, res) => {
-//     const user = req.user;
-//     if (!user) {
-//       return res.status(401).json({ error: 'Unauthorized' });
-//     } 
-  
-//     try {
-//       const accounts = await IncomeService.getAccountsByUser(user.id);
-//       const transactions = await IncomeService.getTransactionsByAccounts(accounts);
-//       const totalIncome = transactions.reduce((acc: number, transaction: { amount: number; }) => acc + transaction.amount, 0);
-  
-//       res.json({ totalIncome });
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ error: 'Internal server error' });
-//     }
-//   });
-
   router.post('/expense', async (req: ReqWithUser, res: Response) => {
     try {
         const { amount, type, notes, accountType, categoryName } = req.body;
@@ -67,5 +86,7 @@ router.post('/income' ,  async (req: ReqWithUser, res: Response) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
+
 
 export default router;

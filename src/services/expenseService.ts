@@ -8,7 +8,7 @@ import categoryModel from "../model/categoryModel";
 import transactionModel from "../model/transactionSchema";
 import UserModel from "../model/userModel";
 import IncomeService from "./incomeService";
-
+ 
 class ExpenseService {
     static async createExpense(req: ReqWithUser, amount: number, notes: string, accountType: AccountType, categoryName: string , type : categoryType): Promise<transaction> {
         try {

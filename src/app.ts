@@ -7,7 +7,7 @@ import categoryRoutes from "./api/routes/categoryRoutes"
 import cookieParser from "cookie-parser";
 import isAuth from './api/routes/middlewares/isAuth';
 import budgetRoutes from "./api/routes/budgetRoutes"
-import incomeRoute from "./api/routes/incomeRoute"
+import incomeRoute from "./api/routes/transactionRoutes"
 const app: Application = express();
 
 app.use(express.json());
