@@ -12,7 +12,6 @@ router.get('/all-expense-transaction', async (req: ReqWithUser, res:Response) =>
     // get all transaction 
  const type = categoryType.expense
  const transactions = await IncomeService.allTransactions(req, type);
-
   return   res.json(transactions)
     
   } catch (error) {
@@ -57,7 +56,7 @@ router.post('/income' ,  async (req: ReqWithUser, res: Response) => {
       const category =  await IncomeService.getcategoryId(categoryName)
       const account = await IncomeService.createAccount(req, accountType);
      
-      category._id ? await IncomeService.createIncome(req, amount, notes, account.id, category._id , accountType , type) : "";
+     await IncomeService.createIncome(req, amount, notes, account.id, category._id , accountType , type) ;
 
       res.status(200).json({ message: 'Income added successfully' });
     } catch (error) {

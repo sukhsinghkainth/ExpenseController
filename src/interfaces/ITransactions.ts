@@ -1,6 +1,7 @@
-import mongoose from "mongoose"
+import mongoose, { ObjectId } from "mongoose"
 import { categoryType } from "./ICategory";
 export default interface transaction {
+    _id: ObjectId;
     amount: number
     type: categoryType
     account: mongoose.Types.ObjectId

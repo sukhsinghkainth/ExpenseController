@@ -9,19 +9,52 @@ import UserModel from '../model/userModel';
 import category, { categoryType } from '../interfaces/ICategory';
 import categoryModel from '../model/categoryModel';
 import transactionModel from '../model/transactionSchema';
+import path from 'path';
+import { transactionResponse } from '../response/transactionResponse';
 
 class IncomeService {
-  static async allTransactions(req: ReqWithUser, type?: categoryType): Promise<transaction[]> {
+  static async transformTransactions(transactions: any[]): Promise<transactionResponse[]> {
+    return transactions.map(transaction => {
+      const account = {
+        _id: transaction.account._id,
+        accountType: transaction.account.accountType
+      };
+      const category = {
+        name: transaction.category.name,
+        type: transaction.category.type
+      };
+      return new transactionResponse(
+        transaction.type,
+        transaction._id,
+        account,
+        category,
+        transaction.notes,
+        transaction.date,
+        transaction.amount
+      );
+    });
+  }
+
+  static async allTransactions(req: ReqWithUser, type?: categoryType): Promise<transactionResponse[]> {
     if (!req.user?.id) {
-      throw new Error("not authe")
+      throw new Error("unauthorized")
     }
     if (!type) {
-      return await transactionModel.find({ user: req.user.id }).populate('category').exec()
+      const transaction = await transactionModel.find({ user: req.user.id })
+        .populate({ path: 'category' })
+        .populate({ path: 'account', select: 'accountType' })
+        .exec()
+        const transactionResponses = await IncomeService.transformTransactions(transaction);
+        return transactionResponses;
     }
-    const transaction = await transactionModel.find({ user: req.user.id, type: type }).populate('category').exec()
-    return transaction;
+    const transaction = await transactionModel.find({ user: req.user.id, type: type })
+      .populate({ path: 'category' })
+      .populate({ path: 'account', select: 'accountType' })
+      .exec()
+      const transactionResponses = await IncomeService.transformTransactions(transaction);
+      return transactionResponses;
   }
-  
+
   static async getcategoryId(name: category): Promise<category> {
     if (!name) {
       throw new Error('Category name is required');
@@ -64,7 +97,7 @@ class IncomeService {
     return newAccount;
   }
 
-  static async createIncome(req: ReqWithUser, amount: number, notes: string, accountId: string, categoryId: string, typeofAccount: AccountType, type: categoryType): Promise<transaction> {
+  static async createIncome(req: ReqWithUser, amount: number, notes: string, accountId: string, categoryId: category["_id"], typeofAccount: AccountType, type: categoryType): Promise<transaction> {
     const user = req.user;
     if (!user) {
       throw new Error("Unauthorized");

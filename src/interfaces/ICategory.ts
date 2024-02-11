@@ -5,7 +5,7 @@ export enum categoryType {
     income = 'income',
 }
 export default interface category {
-    _id ?: string;
+    _id ?: mongoose.Types.ObjectId;
     name : string ;
     type : categoryType;
 }
