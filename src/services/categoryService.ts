@@ -1,5 +1,6 @@
 
 import category, { categoryType } from '../interfaces/ICategory';
+import ReqWithUser from '../interfaces/Ireq';
 import categoryModel from '../model/categoryModel';
 import CategoryModel from '../model/categoryModel';
 import transactionModel from '../model/transactionSchema';
@@ -12,14 +13,18 @@ export default class CategoryService {
   async getAllCategories(): Promise<category[]> {
     return await categoryModel.find()
 }
-  async deleteCategory(name: string): Promise<void> {
+  async deleteCategory( req: ReqWithUser,name: string): Promise<void> {
+    if(!req.user?.id)
+    {
+      throw new Error("not Authenticate")
+    }
     try {
       const category = await CategoryModel.findOne({ name });
       if (!category) {
         throw new Error('Category not found');
       }
       // Delete all transactions associated with the category
-      await transactionModel.deleteMany({ category: category._id });
+      await transactionModel.deleteMany({ category: category._id , user: req.user.id});
 
       // Delete the category itself
       await CategoryModel.findOneAndDelete({ name });

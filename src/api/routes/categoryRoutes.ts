@@ -47,7 +47,7 @@ router.delete('/deleteCategory/:categoryName', async (req: Request, res: Respons
         if (!categoryName) {
             return res.status(400).json({ error: 'Category name is required' });
         }
-        await createCategory.deleteCategory(categoryName);
+        await createCategory.deleteCategory(req,categoryName);
         res.status(200).json({ message: 'Category deleted successfully' });
     } catch (error) {
         console.error(error);

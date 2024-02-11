@@ -1,9 +1,8 @@
 
-import express, { Request, Response, response } from 'express';
+import express, {  Response } from 'express';
 import ReqWithUser from '../../interfaces/Ireq';
 import IncomeService from '../../services/incomeService';
 import ExpenseService from '../../services/expenseService';
-import transactionModel from '../../model/transactionSchema';
 import { categoryType } from '../../interfaces/ICategory';
 
 const router = express.Router();
