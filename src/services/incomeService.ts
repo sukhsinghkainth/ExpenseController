@@ -9,7 +9,6 @@ import UserModel from '../model/userModel';
 import category, { categoryType } from '../interfaces/ICategory';
 import categoryModel from '../model/categoryModel';
 import transactionModel from '../model/transactionSchema';
-import path from 'path';
 import { transactionResponse } from '../response/transactionResponse';
 
 class IncomeService {
@@ -44,15 +43,15 @@ class IncomeService {
         .populate({ path: 'category' })
         .populate({ path: 'account', select: 'accountType' })
         .exec()
-        const transactionResponses = await IncomeService.transformTransactions(transaction);
-        return transactionResponses;
+      const transactionResponses = await IncomeService.transformTransactions(transaction);
+      return transactionResponses;
     }
     const transaction = await transactionModel.find({ user: req.user.id, type: type })
       .populate({ path: 'category' })
       .populate({ path: 'account', select: 'accountType' })
       .exec()
-      const transactionResponses = await IncomeService.transformTransactions(transaction);
-      return transactionResponses;
+    const transactionResponses = await IncomeService.transformTransactions(transaction);
+    return transactionResponses;
   }
 
   static async getcategoryId(name: category): Promise<category> {

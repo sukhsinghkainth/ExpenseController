@@ -11,12 +11,16 @@ const TransactionSchema = new Schema<ITransactions>({
     type : {
         type: String,
         enum : categoryType
-
+        
+    }, 
+    notes: {
+        type: String,
+        required: true,
     },
-    account :{
-            type : Schema.Types.ObjectId,
-            ref : "Account",
-            // required : true,
+    date: {
+        type: Date,
+        required: true,
+        default: Date.now,
     },
     category :
     {
@@ -24,15 +28,10 @@ const TransactionSchema = new Schema<ITransactions>({
         ref : "Category",
         // required : true,
     },
-    date: {
-        type: Date,
-        required: true,
-        default: Date.now,
-    },
-    
-    notes: {
-        type: String,
-        required: true,
+    account :{
+            type : Schema.Types.ObjectId,
+            ref : "Account",
+            // required : true,
     },
     user :
     {
@@ -40,7 +39,7 @@ const TransactionSchema = new Schema<ITransactions>({
         ref : "User",
         // required : true,
     },
- 
+    
 });
 
 const transactionModel : Model<ITransactions> = mongoose.model<ITransactions>('Transaction', TransactionSchema);
