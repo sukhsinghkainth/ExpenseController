@@ -96,7 +96,7 @@ class IncomeService {
     return newAccount;
   }
 
-  static async createIncome(req: ReqWithUser, amount: number, notes: string, accountId: string, categoryId: category["_id"], typeofAccount: AccountType, type: categoryType): Promise<transaction> {
+  static async createIncome(req: ReqWithUser, amount: number, notes: string, accountId: accounts["id"], categoryId: category["_id"], typeofAccount: AccountType, type: categoryType): Promise<transaction> {
     const user = req.user;
     if (!user) {
       throw new Error("Unauthorized");

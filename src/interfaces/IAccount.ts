@@ -7,7 +7,7 @@ export enum AccountType {
 }
 
 export default interface accounts {
-    [x: string]: any;
+    id:mongoose.Types.ObjectId;
     accountType: AccountType;
     transactions: mongoose.Types.ObjectId[];
     users: mongoose.Types.ObjectId[];
