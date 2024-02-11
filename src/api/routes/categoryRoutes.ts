@@ -61,7 +61,32 @@ router.get("/allcategories", async(req:Request, res: Response)=>{
       const   categoryRes  = createCategory.transformCategory(await categories);
       res.json(categoryRes);
         
+    } catch (error) {   console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+        
+    }
+})
+router.get("/all-expense-categories", async(req:Request, res: Response)=>{
+    try {
+        const type = categoryType.expense
+        const categories = createCategory.getAllCategories(type);
+      const   categoryRes  = createCategory.transformCategory(await categories);
+      res.json(categoryRes);
+        
     } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+})
+router.get("/all-income-categories", async(req:Request, res: Response)=>{
+    try {
+        const type = categoryType.income
+        const categories = createCategory.getAllCategories(type);
+      const   categoryRes  = createCategory.transformCategory(await categories);
+      res.json(categoryRes);
+        
+    } catch (error) {   console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
         
     }
 })

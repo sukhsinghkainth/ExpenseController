@@ -10,8 +10,8 @@ export default class CategoryService {
   transformCategory(categories: category[]): categoryResponse[] {
     return categories.map(category => new categoryResponse(category.name, category.type));
   }
-  async getAllCategories(): Promise<category[]> {
-    return await categoryModel.find()
+   async getAllCategories(type? : categoryType): Promise<category[]> {
+   return  type ?  await categoryModel.find({ type }) : await categoryModel.find();
 }
   async deleteCategory( req: ReqWithUser,name: string): Promise<void> {
     if(!req.user?.id)
