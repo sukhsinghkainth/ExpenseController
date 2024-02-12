@@ -5,6 +5,7 @@ import CategoryModel from '../model/categoryModel';
 import category, { categoryType } from '../interfaces/ICategory';
 import UserModel from '../model/userModel';
 import budgetModel from '../model/budgetModel';
+import { BudgetResponse } from '../response/budgetResponse';
 
 class SetBudgetService {
 
@@ -111,6 +112,21 @@ class SetBudgetService {
             throw new Error('Error retrieving category');
         }
     }
+    static async transformBudgets(budgets: any[]): Promise<BudgetResponse[]> {
+     return budgets.map(budgets =>{
+            const category = {
+                name : budgets.category.name,
+                type : budgets.category.type,
+
+            };
+            return new BudgetResponse(
+            category,
+            budgets.limit,
+            budgets.spent,
+            budgets.remaininglimit
+            )
+     })
+      }
     static async viewBudget(req:ReqWithUser)
     {
         if(!req.user)
@@ -118,8 +134,9 @@ class SetBudgetService {
             throw new Error("Unauthorized")
         }
         try {
-        return await budgetModel.find({user : req.user.id})
+        const budgets =  await budgetModel.find({user : req.user.id})
           .populate("category").exec()  
+          return this.transformBudgets(budgets);
           
         } catch (error) {
             throw new Error(`error while fetching categories ${error}`)

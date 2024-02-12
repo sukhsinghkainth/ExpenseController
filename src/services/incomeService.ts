@@ -63,7 +63,7 @@ class IncomeService {
 
     const category = await categoryModel.findOne({ name: name });
 
-    if (!category || category.type !== 'income') {
+    if (!category || category.type !== categoryType.income) {
       return Promise.reject("invalid category")
     }
     return category
