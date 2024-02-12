@@ -60,7 +60,7 @@ router.post("/signup", async (req: Request, res: Response) => {
        createUserService.validataUser(username,email,password)
     try {
         const data = await userService.createUser({
-            username, email, password,
+            username, email, password
         });
 
         const Response = createUserService.transformUserResponse(data);

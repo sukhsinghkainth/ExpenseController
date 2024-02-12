@@ -4,6 +4,8 @@ import ReqWithUser from '../../interfaces/Ireq';
 import IncomeService from '../../services/incomeService';
 import ExpenseService from '../../services/expenseService';
 import { categoryType } from '../../interfaces/ICategory';
+import Account from '../../model/accountModel';
+import { AccountType } from '../../interfaces/IAccount';
 
 const router = express.Router();
 
@@ -84,7 +86,58 @@ router.post('/income' ,  async (req: ReqWithUser, res: Response) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+router.get('/accounts', async (req : ReqWithUser, res: Response)=>{
+try {
+  const allaccounts =  await  IncomeService.allaccount(req)
 
+  
+ return allaccounts ? res.json(allaccounts) : res.json("account not found")
+
+} catch (error) {
+    console.error(error);
+        res.status(500).json({ error: `Internal Server Error ${error}` });
+}
+   
+})
+router.get('/cash-transactions', async (req : ReqWithUser, res: Response)=>{
+  try {
+    const type = AccountType.CASH
+    const allaccounts =  await  IncomeService.allaccount(req,type)
+    return allaccounts.length != 0 ? res.json(allaccounts) : res.json(`${type}  account is empty`)
+    
+  } catch (error) {
+      console.error(error);
+          res.status(500).json({ error: `Internal Server Error ${error}` });
+  }
+     
+  })
+  router.get('/savings-transactions', async (req : ReqWithUser, res: Response)=>{
+    try {
+     const type = AccountType.SAVINGS
+      const allaccounts =  await  IncomeService.allaccount(req,type)
+  
+      
+      return allaccounts.length != 0 ? res.json(allaccounts) : res.json(`${type}  account is empty`)
+    
+    } catch (error) {
+        console.error(error);
+            res.status(500).json({ error: `Internal Server Error ${error}` });
+    }
+       
+    })
+    router.get('/card-transactions', async (req : ReqWithUser, res: Response)=>{
+      try {
+        const type = AccountType.CARD
+        const allaccounts =  await  IncomeService.allaccount(req,type)
+      
+        return allaccounts.length != 0 ? res.json(allaccounts) : res.json(`${type}  account is empty`)
+    
+      } catch (error) {
+          console.error(error);
+              res.status(500).json({ error: `Internal Server Error ${error}` });
+      }
+         
+      })
 
 
 export default router;

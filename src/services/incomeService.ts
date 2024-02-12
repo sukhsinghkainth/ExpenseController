@@ -11,6 +11,8 @@ import categoryModel from '../model/categoryModel';
 import transactionModel from '../model/transactionSchema';
 import { transactionResponse } from '../response/transactionResponse';
 
+import { Types } from 'mongoose';
+
 class IncomeService {
   static async transformTransactions(transactions: any[]): Promise<transactionResponse[]> {
     return transactions.map(transaction => {
@@ -67,8 +69,8 @@ class IncomeService {
     return category
   }
 
-  static async getAccountsByUser(userId: string): Promise<accounts[]> {
-    return AccountModel.find({ users: userId }).exec();
+  static async getAccountsByUser(id: Types.ObjectId): Promise<accounts[]> {
+    return AccountModel.find({ users: id }).exec();
   }
 
   static async getTransactionsByAccounts(accounts: accounts[], type: categoryType): Promise<transaction[]> {
@@ -98,7 +100,7 @@ class IncomeService {
 
   static async createIncome(req: ReqWithUser, amount: number, notes: string, accountId: accounts["id"], categoryId: category["_id"], typeofAccount: AccountType, type: categoryType): Promise<transaction> {
     const user = req.user;
-    if (!user) {
+    if (!user || !user.id) {
       throw new Error("Unauthorized");
     }
     const account = await AccountModel.findById(accountId);
@@ -124,7 +126,7 @@ class IncomeService {
     );
 
 
-
+ 
     const accounts = await IncomeService.getAccountsByUser(user.id);
     const transactions = await IncomeService.getTransactionsByAccounts(accounts, type);
     const totalIncome = transactions.reduce((acc: number, transaction: { amount: number; }) => acc + transaction.amount, 0);
@@ -132,6 +134,18 @@ class IncomeService {
 
 
     return newTransaction;
+  }
+  static async allaccount(req: ReqWithUser, type?: AccountType):Promise<accounts[]> {
+    try {
+      if (!req.user) {
+        throw new Error("Unauthorize")
+      }
+  
+    return type ? await AccountModel.find({ users: req.user.id, accountType: type }) : await AccountModel.find({ users: req.user.id }).populate("transactions").exec() 
+    } catch (error: any) {
+      console.log(error)
+      throw new Error(error)
+    }
   }
 }
 
