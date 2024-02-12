@@ -1,8 +1,6 @@
-import express, { Request, Response } from 'express';
+import express, {  Response } from 'express';
 import ReqWithUser from '../../interfaces/Ireq';
 import setBudgetService from '../../services/budgetService';
-import transaction from '../../interfaces/ITransactions';
-import Account, { AccountType } from '../../interfaces/IAccount';
 import SetBudgetService from '../../services/budgetService';
 
 
@@ -63,7 +61,7 @@ router.delete('/deleteBudget', async (req: ReqWithUser, res: Response) => {
 router.get('/view-budgets', async (req:ReqWithUser, res:Response)=>{
   try {
    const allBudget = await SetBudgetService.viewBudget(req)
-    return res.json(allBudget)
+    return res.json({budget:allBudget})
   } catch (error) {
       throw new Error(`internal server error ${error}`)
   }

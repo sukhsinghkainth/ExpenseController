@@ -12,6 +12,7 @@ import transactionModel from '../model/transactionSchema';
 import { transactionResponse } from '../response/transactionResponse';
 
 import { Types } from 'mongoose';
+import { BudgetResponse } from '../response/budgetResponse';
 
 class IncomeService {
   static async transformTransactions(transactions: any[]): Promise<transactionResponse[]> {
@@ -126,7 +127,7 @@ class IncomeService {
     );
 
 
- 
+
     const accounts = await IncomeService.getAccountsByUser(user.id);
     const transactions = await IncomeService.getTransactionsByAccounts(accounts, type);
     const totalIncome = transactions.reduce((acc: number, transaction: { amount: number; }) => acc + transaction.amount, 0);
@@ -135,18 +136,42 @@ class IncomeService {
 
     return newTransaction;
   }
-  static async allaccount(req: ReqWithUser, type?: AccountType):Promise<accounts[]> {
+  static async allaccount(req: ReqWithUser, type?: AccountType): Promise<accounts[]> {
     try {
       if (!req.user) {
         throw new Error("Unauthorize")
       }
-  
-    return type ? await AccountModel.find({ users: req.user.id, accountType: type }) : await AccountModel.find({ users: req.user.id }).populate("transactions").exec() 
+
+      const accounts = type ? await AccountModel.find({ users: req.user.id, accountType: type }).populate({ path: 'transactions', populate: { path: 'category' } }).exec() : await AccountModel.find({ users: req.user.id }).populate({ path: 'transactions', populate: { path: 'category' } }).exec();
+      const transformedAccounts = await IncomeService.transformAccountResponse(accounts);
+      return transformedAccounts;
     } catch (error: any) {
       console.log(error)
       throw new Error(error)
     }
   }
+  static async transformAccountResponse(accounts: any[]): Promise<any[]> {
+    return accounts.map(account => {
+      const transactions = account.transactions.map((transaction: { amount: number; type: AccountType; notes: string; category: { name: string; type: categoryType ; }; date: Date; account: accounts; }) => ({
+        amount: transaction.amount,
+        type: transaction.type,
+        notes: transaction.notes,
+        category: {
+          name: transaction.category.name,
+          type: transaction.category.type
+        },
+        date: transaction.date,
+        account: transaction.account,
+
+      }));
+      return {
+            
+        accountType: account.accountType,
+        transactions: transactions
+      };
+    });
+  }
+
 }
 
 export default IncomeService; 

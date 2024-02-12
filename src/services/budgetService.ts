@@ -6,9 +6,25 @@ import category, { categoryType } from '../interfaces/ICategory';
 import UserModel from '../model/userModel';
 import budgetModel from '../model/budgetModel';
 import { BudgetResponse } from '../response/budgetResponse';
+import budget from '../interfaces/IBudget';
 
 class SetBudgetService {
-
+    //transform budget response 
+    static async transformBudgets(budgets: any[]): Promise<BudgetResponse[]> {
+     return budgets.map(budgets =>{
+            const category : category = {
+                name : budgets.category.name,
+                type : budgets.category.type,
+    
+            };
+            return new BudgetResponse(
+            category,
+            budgets.limit,
+            budgets.spent,
+            budgets.remaininglimit
+            )
+     })
+      }
     // set budget 
     
     static setBudget = async (req: ReqWithUser, categoryName: string, limit: number): Promise<void> => {
@@ -112,21 +128,7 @@ class SetBudgetService {
             throw new Error('Error retrieving category');
         }
     }
-    static async transformBudgets(budgets: any[]): Promise<BudgetResponse[]> {
-     return budgets.map(budgets =>{
-            const category = {
-                name : budgets.category.name,
-                type : budgets.category.type,
-
-            };
-            return new BudgetResponse(
-            category,
-            budgets.limit,
-            budgets.spent,
-            budgets.remaininglimit
-            )
-     })
-      }
+    //view budget
     static async viewBudget(req:ReqWithUser)
     {
         if(!req.user)
