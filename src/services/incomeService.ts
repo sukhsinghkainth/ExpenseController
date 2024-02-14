@@ -10,9 +10,8 @@ import category, { categoryType } from '../interfaces/ICategory';
 import categoryModel from '../model/categoryModel';
 import transactionModel from '../model/transactionSchema';
 import { transactionResponse } from '../response/transactionResponse';
-
 import { Types } from 'mongoose';
-import { BudgetResponse } from '../response/budgetResponse';
+import { error } from 'console';
 
 class IncomeService {
   static async transformTransactions(transactions: any[]): Promise<transactionResponse[]> {
@@ -41,15 +40,14 @@ class IncomeService {
     if (!req.user?.id) {
       throw new Error("unauthorized")
     }
-    if (!type) {
-      const transaction = await transactionModel.find({ user: req.user.id })
-        .populate({ path: 'category' })
-        .populate({ path: 'account', select: 'accountType' })
-        .exec()
-      const transactionResponses = await IncomeService.transformTransactions(transaction);
-      return transactionResponses;
+    let query: Record<string, unknown> = { user: req.user.id }
+    if (type) {
+      if(!(type in categoryType)){
+         throw new Error("type should be expense or income")
+          }
+      query = { user: req.user.id, type: type }
     }
-    const transaction = await transactionModel.find({ user: req.user.id, type: type })
+    const transaction = await transactionModel.find(query)
       .populate({ path: 'category' })
       .populate({ path: 'account', select: 'accountType' })
       .exec()
@@ -141,8 +139,11 @@ class IncomeService {
       if (!req.user) {
         throw new Error("Unauthorize")
       }
-
-      const accounts = type ? await AccountModel.find({ users: req.user.id, accountType: type }).populate({ path: 'transactions', populate: { path: 'category' } }).exec() : await AccountModel.find({ users: req.user.id }).populate({ path: 'transactions', populate: { path: 'category' } }).exec();
+      let query: Record<string, unknown> = { users: req.user.id }
+      if (type) {
+        query = { users: req.user.id, accountType: type }
+      }
+      const accounts = await AccountModel.find(query).populate({ path: 'transactions', populate: { path: 'category' } }).exec()
       const transformedAccounts = await IncomeService.transformAccountResponse(accounts);
       return transformedAccounts;
     } catch (error: any) {
@@ -152,7 +153,7 @@ class IncomeService {
   }
   static async transformAccountResponse(accounts: any[]): Promise<any[]> {
     return accounts.map(account => {
-      const transactions = account.transactions.map((transaction: { amount: number; type: AccountType; notes: string; category: { name: string; type: categoryType ; }; date: Date; account: accounts; }) => ({
+      const transactions = account.transactions.map((transaction: { amount: number; type: AccountType; notes: string; category: { name: string; type: categoryType; }; date: Date; account: accounts; }) => ({
         amount: transaction.amount,
         type: transaction.type,
         notes: transaction.notes,
@@ -165,7 +166,7 @@ class IncomeService {
 
       }));
       return {
-            
+
         accountType: account.accountType,
         transactions: transactions
       };

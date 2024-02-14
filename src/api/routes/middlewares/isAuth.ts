@@ -9,7 +9,6 @@ const isAuth = (req: ReqWithUser, res: Response, next: NextFunction) => {
   if (!token) {
     return res.status(401).json({ error: 'No token, authorization denied' });
   }
-
   try {
     const decoded = jwt.verify(token, config.JWT_KEY as string) as User;
     req.user = decoded;

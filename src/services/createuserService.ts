@@ -27,8 +27,8 @@ class createUserService {
         }
         
     }
-    async createUser(userdata: User): Promise<User> {
-        const { username, email, password } = userdata;
+    async createUser(username : string, email : string, password : string ): Promise<User> {
+     
         const existingUser = await userModel.findOne({ $or: [{ username }, { email }] });
         if (existingUser) {
             throw new Error('user already exist');

@@ -62,7 +62,7 @@ class ExpenseService {
             await Account.updateOne(
                 { users: user.id, accountType: accountType },
                 { $push: { transactions: newTransaction.id } }
-              );
+            );
 
             const accounts = await IncomeService.getAccountsByUser(user.id);
             const transactions = await IncomeService.getTransactionsByAccounts(accounts, type);
