@@ -17,7 +17,7 @@ router.get('/alltransaction/:categorytype?', async (req: ReqWithUser, res: Respo
     return res.json(transactions)
   } catch (error) {
     console.error(error)
-   res.status(400).json({ error: `An error occurred while trying to get the transactions ${error}` })
+    res.status(400).json({ error: `An error occurred while trying to get the transactions ${error}` })
   }
 })
 
@@ -44,7 +44,7 @@ router.post('/transaction', async (req: ReqWithUser, res: Response) => {
     }
   } catch (error) {
     console.error(error);
-   res.status(500).json({ error: `Error adding new transaction: ${error}` });
+    res.status(500).json({ error: `Error adding new transaction: ${error}` });
   }
 });
 
