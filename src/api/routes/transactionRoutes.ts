@@ -17,7 +17,7 @@ router.get('/alltransaction/:categorytype?', async (req: ReqWithUser, res: Respo
     return res.json(transactions)
   } catch (error) {
     console.error(error)
-    res.status(500).json({ error: `${error}` });
+   res.status(400).json({ error: `An error occurred while trying to get the transactions ${error}` })
   }
 })
 
@@ -44,7 +44,7 @@ router.post('/transaction', async (req: ReqWithUser, res: Response) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: `${error}` });
+   res.status(500).json({ error: `Error adding new transaction: ${error}` });
   }
 });
 
@@ -66,88 +66,7 @@ router.get('/account/:accounttype?', async (req: ReqWithUser, res: Response) => 
       return res.json(allaccounts.length > 0 ? allaccounts : "No accounts found");
     }
   } catch (error) {
-    res.status(500).json({ error: `${error}` });
+    res.status(500).json({ error: `error while fetching account details ${(error as Error).message}` });
   }
 });
-// router.get('/cash-transactions', async (req: ReqWithUser, res: Response) => {
-//   try {
-//     const type = AccountType.CASH
-//     const allaccounts = await IncomeService.allaccount(req, type)
-//     return allaccounts.length != 0 ? res.json(allaccounts) : res.json(`${type}  account is empty`)
-
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: `Internal Server Error ${error}` });
-//   }
-
-// })
-// router.get('/savings-transactions', async (req: ReqWithUser, res: Response) => {
-//   try {
-//     const type = AccountType.SAVINGS
-//     const allaccounts = await IncomeService.allaccount(req, type)
-
-
-//     return allaccounts.length != 0 ? res.json(allaccounts) : res.json(`${type}  account is empty`)
-
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: `Internal Server Error ${error}` });
-//   }
-
-// })
-// router.get('/card-transactions', async (req: ReqWithUser, res: Response) => {
-//   try {
-//     const type = AccountType.CARD
-//     const allaccounts = await IncomeService.allaccount(req, type)
-
-//     return allaccounts.length != 0 ? res.json(allaccounts) : res.json(`${type}  account is empty`)
-
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: `Internal Server Error ${error}` });
-//   }
-
-// })
-// router.get('/all-expense-transaction', async (req: ReqWithUser, res: Response) => {
-//   try {
-//     // get all transaction 
-//     const type = categoryType.expense
-//     const transactions = await IncomeService.allTransactions(req, type);
-//     return res.json(transactions)
-
-//   } catch (error) {
-//     console.error(error)
-//   }
-// })
-// router.get('/all-income-transaction', async (req: ReqWithUser, res: Response) => {
-//   try {
-//     // get all transaction 
-//     const type = categoryType.income
-//     const transactions = await IncomeService.allTransactions(req, type);
-
-//     return res.json(transactions)
-
-//   } catch (error) {
-//     console.error(error)
-//   }
-// })
-
-// router.post('/expense', async (req: ReqWithUser, res: Response) => {
-//   try {
-//     const { amount, type, notes, accountType, categoryName } = req.body;
-//     if (!amount || !type || !notes || !accountType || !categoryName) {
-//       return res.status(400).json({ error: 'All fields are required' });
-//     }
-
-//     if (type !== 'expense') {
-//       return res.status(400).json({ error: 'Type should be expense' });
-//     }
-
-
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
-
 export default router;

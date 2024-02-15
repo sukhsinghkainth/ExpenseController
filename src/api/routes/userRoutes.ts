@@ -50,7 +50,7 @@ router.get("/test", auth, async (req: ReqWithUser, res: Response) => {
             u
         })
     } catch (error) {
-        console.error(error)
+        res.status(500).json({ error : ` ${(error as Error).message}` });
     }
 })
 
@@ -70,7 +70,7 @@ router.post("/signup", async (req: Request, res: Response) => {
         });
     } catch (error: any) {
         console.error(error.message)
-        res.status(500).json({ error });
+        res.status(500).json({ error : `error while trying to signup : ${(error as Error).message}` });
     }
 
 })

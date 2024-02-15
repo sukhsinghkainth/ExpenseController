@@ -19,7 +19,7 @@ router.post('/setBudget', async (req: ReqWithUser, res: Response) => {
     res.status(200).json({ message: 'Budget set successfully' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: `Error setting budget:${(error as Error).message}` });
   }
 });
 router.put('/updateBudget', async (req: ReqWithUser, res: Response) => {
@@ -35,7 +35,7 @@ router.put('/updateBudget', async (req: ReqWithUser, res: Response) => {
     res.status(200).json({ message: 'Budget updated successfully' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: `Error updating budget: ${(error as Error).message}` });
   }
 });
 
@@ -54,7 +54,7 @@ router.delete('/deleteBudget', async (req: ReqWithUser, res: Response) => {
     res.status(200).json({ message: 'Budget deleted successfully' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: ` Error deleting budget: ${(error as Error).message}` });
   }
 });
 
@@ -63,7 +63,7 @@ router.get('/view-budgets', async (req:ReqWithUser, res:Response)=>{
    const allBudget = await SetBudgetService.viewBudget(req)
     return res.json({budget:allBudget})
   } catch (error) {
-      throw new Error(`internal server error ${error}`)
+      throw new Error(`Could not fetch budgets: ${error}`)
   }
 })
 

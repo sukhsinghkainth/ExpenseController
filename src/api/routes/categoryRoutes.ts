@@ -14,7 +14,7 @@ router.post('/createCategory', async (req: Request, res: Response) => {
         return res.status(201).json({ name: newCategory.name, type: newCategory.type });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        return res.status(500).json({ error: `Error while create category ${(error as Error).message}` });
     }
 });
 
@@ -24,10 +24,10 @@ router.put('/editCategory/:categoryname', async (req: Request, res: Response) =>
         const { name, type } = req.body as category;
 
         if (!name && !type) {
-            return res.status(400).json({ error: 'Name or type is required for editing a category' });
+            return res.status(400).json({ error: `You must provide either the name or the type to update` });
         }
         if (!(type in categoryType)) {
-            return res.status(400).json({ error: 'Invalid category type' });
+            return res.status(400).json({ error: `Invalid category type "${type}" provided.` });
         }
         const updatedCategory = await createCategory.updateCategory(categoryname, {
             name, type
@@ -35,7 +35,7 @@ router.put('/editCategory/:categoryname', async (req: Request, res: Response) =>
         return res.status(200).json(updatedCategory);
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        return res.status(500).json({ error: `Failed to update category: ${(error as Error).message}` });
     }
 });
 
@@ -45,22 +45,22 @@ router.delete('/deleteCategory/:categoryName', async (req: Request, res: Respons
         if (!categoryName) {
             return res.status(400).json({ error: 'Category name is required' });
         }
-        await createCategory.deleteCategory(req,categoryName);
+        await createCategory.deleteCategory(req, categoryName);
         res.status(200).json({ message: 'Category deleted successfully' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: ` Failed to delete category: ${(error as Error).message || "Internal Server Error"}` });
     }
 });
 
-router.get("/allcategories/:typeOfCategory?", async(req:Request, res: Response)=>{
+router.get("/allcategories/:typeOfCategory?", async (req: Request, res: Response) => {
     try {
-        const {typeOfCategory} = req.params;
+        const { typeOfCategory } = req.params;
         const categories = await createCategory.getAllCategories(typeOfCategory as categoryType);
-      res.json(categories);
-    } catch (error) {   console.error(error);
-        res.status(402).json({ error: `${error}` });
-        
+        res.json(categories);
+    } catch (error) {
+        console.error(error);
+        res.status(402).json({ error: `Failed to fetch all categories : ${(error as Error).message}` });
     }
 })
 // router.get("/all-expense-categories", async(req:Request, res: Response)=>{
@@ -69,7 +69,7 @@ router.get("/allcategories/:typeOfCategory?", async(req:Request, res: Response)=
 //         const categories = createCategory.getAllCategories(type);
 //       const   categoryRes  = createCategory.transformCategory(await categories);
 //       res.json(categoryRes);
-        
+
 //     } catch (error) {
 //         console.error(error);
 //         res.status(500).json({ error: 'Internal Server Error' });
@@ -81,10 +81,10 @@ router.get("/allcategories/:typeOfCategory?", async(req:Request, res: Response)=
 //         const categories = createCategory.getAllCategories(type);
 //       const   categoryRes  = createCategory.transformCategory(await categories);
 //       res.json(categoryRes);
-        
+
 //     } catch (error) {   console.error(error);
 //         res.status(500).json({ error: 'Internal Server Error' });
-        
+
 //     }
 // })
 
