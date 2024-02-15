@@ -61,6 +61,10 @@ router.delete('/deleteBudget', async (req: ReqWithUser, res: Response) => {
 router.get('/view-budgets', async (req:ReqWithUser, res:Response)=>{
   try {
    const allBudget = await SetBudgetService.viewBudget(req)
+ // if all budget length got zero 
+ if(allBudget.length == 0){
+  return res.json("budget not found")
+ }
     return res.json({budget:allBudget})
   } catch (error) {
       throw new Error(`Could not fetch budgets: ${error}`)

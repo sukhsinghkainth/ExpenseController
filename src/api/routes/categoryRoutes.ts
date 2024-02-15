@@ -35,7 +35,7 @@ router.put('/editCategory/:categoryname', async (req: Request, res: Response) =>
         return res.status(200).json(updatedCategory);
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: `Failed to update category: ${(error as Error).message}` });
+        return res.status(500).json({ error: `${(error as Error).message}` });
     }
 });
 
@@ -49,7 +49,7 @@ router.delete('/deleteCategory/:categoryName', async (req: Request, res: Respons
         res.status(200).json({ message: 'Category deleted successfully' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: ` Failed to delete category: ${(error as Error).message || "Internal Server Error"}` });
+        res.status(500).json({ error: `${(error as Error).message || "Internal Server Error"}` });
     }
 });
 
