@@ -7,11 +7,23 @@ import transactionModel from '../model/transactionSchema';
 import { categoryResponse } from '../response/categoryResponse';
 
 export default class CategoryService {
+  typeOfCategory(type: categoryType)
+  {
+    if(!(type in categoryType)){
+      throw new Error("type should be expense or income")
+       }
+     return type
+  }
   transformCategory(categories: category[]): categoryResponse[] {
     return categories.map(category => new categoryResponse(category.name, category.type));
   }
    async getAllCategories(type? : categoryType): Promise<category[]> {
-   return  type ?  await categoryModel.find({ type }) : await categoryModel.find();
+  if(type){
+    this.typeOfCategory(type)
+  }
+  const categories =   type ?  await categoryModel.find({ type }) : await categoryModel.find();
+  const categoryRes  = this.transformCategory(categories);
+  return categoryRes
 }
   async deleteCategory( req: ReqWithUser,name: string): Promise<void> {
     if(!req.user?.id)

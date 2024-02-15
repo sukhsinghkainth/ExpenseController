@@ -15,7 +15,6 @@ export class authService {
             }
             const token = this.generateToken(user);
             return { user, token };
-
         } catch (error) {
             console.log(`Error in Auth Service ${error}`);
             throw error;

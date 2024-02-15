@@ -11,8 +11,8 @@ import categoryModel from '../model/categoryModel';
 import transactionModel from '../model/transactionSchema';
 import { transactionResponse } from '../response/transactionResponse';
 import { Types } from 'mongoose';
-import { error } from 'console';
-
+import CategoryService from './categoryService';
+const categoryService =  new CategoryService()
 class IncomeService {
   static async transformTransactions(transactions: any[]): Promise<transactionResponse[]> {
     return transactions.map(transaction => {
@@ -42,9 +42,7 @@ class IncomeService {
     }
     let query: Record<string, unknown> = { user: req.user.id }
     if (type) {
-      if(!(type in categoryType)){
-         throw new Error("type should be expense or income")
-          }
+          categoryService.typeOfCategory(type)
       query = { user: req.user.id, type: type }
     }
     const transaction = await transactionModel.find(query)
