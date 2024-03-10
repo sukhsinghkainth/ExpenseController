@@ -1,8 +1,0 @@
-{
-    "_id": {
-        "$oid": "659e6bec5f1a910f02786e0f"
-    },
-    "description": "Groceries",
-    "amount": 200,
-    "user": "john_doe"
-}

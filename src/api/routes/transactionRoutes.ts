@@ -33,14 +33,14 @@ router.post('/transaction', async (req: ReqWithUser, res: Response) => {
       const category = await IncomeService.getcategoryId(categoryName)
       const account = await IncomeService.createAccount(req, accountType);
       await IncomeService.createIncome(req, amount, notes, account.id, category._id, accountType, type);
-      res.status(200).json({ message: 'Income added successfully' });
+     return res.status(200).json({ message: 'Income added successfully' });
     }
     if (type === 'expense') {
       await ExpenseService.createExpense(req, amount, notes, accountType, categoryName, type);
-      res.status(200).json({ message: 'Expense added successfully' });
+     return res.status(200).json({ message: 'Expense added successfully' });
     }
     else {
-      res.status(404).json({ message: 'type should be income or expense' });
+     return  res.status(404).json({ message: 'type should be income or expense' });
     }
   } catch (error) {
     console.error(error);

@@ -1,5 +1,5 @@
 // user.routes.ts
-import express, { Request, Response } from 'express';
+import express, { Request, Response} from 'express';
 import createUserService from "../../services/createuserService"
 import User from '../../interfaces/IUser';
 import { authService } from '../../services/authService';
@@ -57,20 +57,25 @@ router.get("/test", auth, async (req: ReqWithUser, res: Response) => {
 router.post("/signup", async (req: Request, res: Response) => {
     const { username, email, password } = req.body;
 
-       createUserService.validataUser(username,email,password)
+     try {
+         createUserService.validataUser(username,email,password)
+     }  catch (error: any) {
+        console.error(error.message)
+       return  res.status(500).json({ error : `error while trying to signup : ${(error as Error).message}` });
+    }
     try {
         const data = await userService.createUser(
             username, email, password
-        );
+        )
 
         const Response = createUserService.transformUserResponse(data);
-        res.status(201).json({
-            Response,
-            messaage: "user created successfully"
-        });
+        return res.status(201).json({
+             Response,
+             messaage: "user created successfully"
+         });
     } catch (error: any) {
         console.error(error.message)
-        res.status(500).json({ error : `error while trying to signup : ${(error as Error).message}` });
+     return  res.status(500).json({ error : `error while trying to signup : ${(error as Error).message}` });
     }
 
 })

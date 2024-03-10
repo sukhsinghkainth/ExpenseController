@@ -11,7 +11,9 @@ router.post('/createCategory', async (req: Request, res: Response) => {
             return res.status(400).json({ error: 'Name and type are required for creating a category' });
         }
         const newCategory = await createCategory.createCategory({ name, type });
-        return res.status(201).json({ name: newCategory.name, type: newCategory.type });
+        return res.status(201).json({
+            newCategory, message: "category created successfully"
+        });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: `Error while create category ${(error as Error).message}` });
@@ -32,7 +34,8 @@ router.put('/editCategory/:categoryname', async (req: Request, res: Response) =>
         const updatedCategory = await createCategory.updateCategory(categoryname, {
             name, type
         });
-        return res.status(200).json(updatedCategory);
+        return res.status(200).json({updatedCategory,
+        message : "successfully edit the category"});
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: `${(error as Error).message}` });

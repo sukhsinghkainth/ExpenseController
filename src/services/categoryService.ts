@@ -35,21 +35,28 @@ export default class CategoryService {
       if (!category) {
         throw new Error('Category not found');
       }
+     
       // Delete all transactions associated with the category
-      await transactionModel.deleteMany({ category: category._id , user: req.user.id});
+    const ExistingTransatciton =  await transactionModel.find({category : category._id, user : req.user.id})
 
+console.log(ExistingTransatciton.length)
+      if(ExistingTransatciton.length > 0)
+      {
+        throw new Error(`THERE IS ALREADY A TRANSACTION ON ${name}` )
+      }
+      // await transactionModel.deleteMany({ category: category._id , user: req.user.id});
       // Delete the category itself
       await CategoryModel.findOneAndDelete({ name });
     } catch (error) {
       console.error(error);
-      throw new Error('Failed to delete category');
+      throw new Error(`${error}`);
     }
   }
 
   async createCategory(categoryData: category): Promise<category> {
     try {
       const { name } = categoryData;
-      const existingCategory = await CategoryModel.findOne({ name });
+      const existingCategory = await CategoryModel.findOne({ name : name});
       if (existingCategory) {
         throw new Error('category already exists');
       }

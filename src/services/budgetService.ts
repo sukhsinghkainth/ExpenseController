@@ -41,18 +41,18 @@ class SetBudgetService {
             if (existingBudget) {
 
                 throw new Error("budget already exist ")
-            }  
-                const newBudget = new BudgetModel({
-                    user: req.user.id,
-                    category: category._id,
-                    limit,
-                    remaininglimit: limit,
-                });
+            }
+            const newBudget = new BudgetModel({
+                user: req.user.id,
+                category: category._id,
+                limit,
+                remaininglimit: limit,
+            });
 
-                await newBudget.save();
-                await UserModel.findByIdAndUpdate(req.user.id, { $addToSet: { budget: newBudget.id } });
+            await newBudget.save();
+            await UserModel.findByIdAndUpdate(req.user.id, { $addToSet: { budget: newBudget.id } });
 
-            
+
         } catch (error) {
             console.error(error);
             throw error;
@@ -80,7 +80,7 @@ class SetBudgetService {
             }
 
             existingBudget.limit = limit;
-            existingBudget.remaininglimit = limit;
+            existingBudget.remaininglimit = limit - existingBudget.spent;
 
             await existingBudget.save();
 
@@ -136,10 +136,11 @@ class SetBudgetService {
         try {
             const budgets = await budgetModel.find({ user: req.user.id })
                 .populate("category").exec()
-            return this.transformBudgets(budgets);
+                const trnasform = this.transformBudgets(budgets);
+           return  trnasform;
 
-        } catch (error) {
-            throw new Error(`error while fetching categories ${error}`)
+        } catch (error: any) {
+            throw  Error(`error while fetching budget ${error}`)
         }
     }
 }

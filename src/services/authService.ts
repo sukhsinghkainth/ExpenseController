@@ -31,7 +31,7 @@ export class authService {
             id: user.id,
         };
         let Token = jwt.sign(payload, JWT_KEY!, {
-            expiresIn: "2h",
+            expiresIn: "4h",
         });
         user = user.toObject();
         user.token = Token;
