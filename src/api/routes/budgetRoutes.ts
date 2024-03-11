@@ -41,10 +41,9 @@ router.put('/updateBudget', async (req: ReqWithUser, res: Response) => {
 
 // delete budget route 
 
-router.delete('/deleteBudget', async (req: ReqWithUser, res: Response) => {
+router.delete('/deleteBudget/:categoryName', async (req: ReqWithUser, res: Response) => {
   try {
-    const { categoryName } = req.body;
-
+    const { categoryName } = req.params;
     if (!categoryName) {
       return res.status(400).json({ error: 'Category name is required' });
     }
