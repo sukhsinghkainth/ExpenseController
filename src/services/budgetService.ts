@@ -100,7 +100,7 @@ class SetBudgetService {
             const category = await SetBudgetService.getCategoryByName(categoryName)
 
             if (!category || category.type !== categoryType.expense) {
-                throw new Error('Budget can only be deleted for expense categories or category not available')
+                throw new Error('category not available')
             }
 
             const existingBudget = await BudgetModel.findOne({ user: req.user.id, category: category._id })

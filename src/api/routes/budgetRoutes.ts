@@ -53,7 +53,7 @@ router.delete('/deleteBudget/:categoryName', async (req: ReqWithUser, res: Respo
     res.status(200).json({ message: 'Budget deleted successfully' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: ` Error deleting budget: ${(error as Error).message}` });
+    res.status(500).json({ error: `${(error as Error).message}` });
   }
 });
 
